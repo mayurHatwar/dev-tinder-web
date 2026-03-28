@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [emailId, setEmailId] = useState("mayur@gmail.com");
   const [password, setPassword] = useState("Mayur@123");
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,10 +22,14 @@ const Login = () => {
           withCredentials: true,
         },
       );
+
       dispatch(addUser(response.data));
-      navigate("/");
+      return navigate("/");
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Login error:", error.message);
+      setError(
+        error.response?.data?.error || "Login failed. Please try again.",
+      );
     }
   };
   return (
@@ -49,7 +54,7 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
+        <p className="text-error">{error}</p>
         <button className="btn btn-neutral mt-4" onClick={handleLogin}>
           Login
         </button>

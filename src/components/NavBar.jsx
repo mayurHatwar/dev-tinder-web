@@ -12,7 +12,7 @@ const NavBar = () => {
   const handleLogOut = async () => {
     await axios.post(BASE_URL + "/logout", {}, { withCredentials: true }); // Make API call to log out the user
     dispatch(removeUser()); // Clear user data from Redux store
-    navigate("/login"); // Redirect to login page after logout
+    return navigate("/login"); // Redirect to login page after logout
   };
 
   return (
@@ -29,9 +29,9 @@ const NavBar = () => {
         </div>
       </div>
       <div className="flex gap-2">
-        {user && (
+        {
           <div className="dropdown dropdown-end flex gap-4">
-            <p>Welcome, {user.data.firstName}</p>
+            <p>Welcome, {user?.data?.firstName}</p>
             <div
               tabIndex={0}
               role="button"
@@ -41,7 +41,7 @@ const NavBar = () => {
                 <img
                   alt="Tailwind CSS Navbar component"
                   src={
-                    user.data.photoUrl ||
+                    user?.data?.photoUrl ||
                     "https://w0.peakpx.com/wallpaper/153/89/HD-wallpaper-coding-lover-black-coding-heart-lover-programing-red.jpg"
                   }
                 />
@@ -65,7 +65,7 @@ const NavBar = () => {
               </li>
             </ul>
           </div>
-        )}
+        }
       </div>
     </div>
   );
