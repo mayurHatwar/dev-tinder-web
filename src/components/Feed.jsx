@@ -21,6 +21,10 @@ const Feed = () => {
     } catch (error) {}
   };
 
+  if (users.length === 0) {
+    return <div className="w-2/3 mx-auto mt-10">No users found.</div>;
+  }
+
   return (
     <div className="flex flex-row  justify-center mt-10 gap-6">
       {users && users.map((user) => <UserCard key={user._id} user={user} />)}
