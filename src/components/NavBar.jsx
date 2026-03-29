@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeUser } from "../utils/UserSlice";
+import { removeUser } from "../utils/userSlice";
 import axios from "axios";
-import { BASE_URL } from "../utils/Constant";
+import { BASE_URL } from "../utils/constant";
 
 const NavBar = () => {
   const user = useSelector((state) => state.user.user);
@@ -54,11 +54,17 @@ const NavBar = () => {
               <li>
                 <Link to="/profile" className="justify-between">
                   Profile
-                  <span className="badge">New</span>
                 </Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to="/connections" className="justify-between">
+                  Connections
+                </Link>
+              </li>
+              <li>
+                <Link to="/requests" className="justify-between">
+                  Requests
+                </Link>
               </li>
               <li>
                 <button onClick={handleLogOut}>Logout</button>

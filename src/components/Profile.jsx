@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../utils/Constant";
+import { BASE_URL } from "../utils/constant";
 import UserCard from "./UserCard";
 
 const Profile = () => {

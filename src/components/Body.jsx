@@ -3,8 +3,8 @@ import NavBar from "./NavBar";
 import axios from "axios";
 import { use, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../utils/UserSlice";
-import { BASE_URL } from "../utils/Constant";
+import { addUser } from "../utils/userSlice";
+import { BASE_URL } from "../utils/constant";
 
 const Body = () => {
   const dispatch = useDispatch();

@@ -2,8 +2,8 @@ import axios from "axios";
 import UserCard from "./UserCard";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { addUserFeed } from "../utils/UserFeedSlice";
-import { BASE_URL } from "../utils/Constant";
+import { addUserFeed } from "../utils/userFeedSlice";
+import { BASE_URL } from "../utils/constant";
 
 const Feed = () => {
   const dispatch = useDispatch();
