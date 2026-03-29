@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import Connection from "./components/Connection";
 import Request from "./components/Request";
+import SingUp from "./components/SingUp";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/connections" element={<Connection />} />
               <Route path="/requests" element={<Request />} />
+              <Route path="/signup" element={<SingUp />} />
             </Route>
           </Routes>
         </BrowserRouter>

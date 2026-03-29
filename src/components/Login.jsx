@@ -58,6 +58,12 @@ const Login = () => {
         <button className="btn btn-neutral mt-4" onClick={handleLogin}>
           Login
         </button>
+        <button
+          className="btn btn-neutral mt-4"
+          onClick={() => navigate("/signup")}
+        >
+          Signup
+        </button>
       </fieldset>
     </div>
   );
