@@ -1,99 +1,88 @@
-import { useEffect } from "react";
-import { BASE_URL } from "../utils/constant";
-import { useDispatch, useSelector } from "react-redux";
-import { addConnection } from "../utils/connectionSlice";
 import axios from "axios";
-import { addRequest } from "../utils/requestSlice";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { addRequests, removeRequest } from "../utils/requestSlice";
+import { useEffect, useState } from "react";
 
-const Request = () => {
+const Requests = () => {
+  const requests = useSelector((store) => store.requests);
   const dispatch = useDispatch();
-  const requests = useSelector((state) => state.request);
-  const fetchRequests = async () => {
+
+  const reviewRequest = async (status, _id) => {
     try {
-      const response = await axios.get(`${BASE_URL}/user/requests/received`, {
-        withCredentials: true,
-      });
-      console.log("Fetched requests:", response.data.data);
-      dispatch(addRequest(response.data.data));
-    } catch (error) {
-      console.error("Error fetching requests:", error);
-    }
+      const res = axios.post(
+        BASE_URL + "/request/review/" + status + "/" + _id,
+        {},
+        { withCredentials: true },
+      );
+      dispatch(removeRequest(_id));
+    } catch (err) {}
   };
 
-  const reviewRequest = async (state, id) => {
+  const fetchRequests = async () => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/request/review/${state}/${id}`,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
-      console.log("Fetched requests:", response.data);
-      dispatch(addRequest(response.data.data));
-    } catch (error) {
-      console.error("Error fetching requests:", error);
-    }
+      const res = await axios.get(BASE_URL + "/user/requests/received", {
+        withCredentials: true,
+      });
+
+      dispatch(addRequests(res.data.data));
+    } catch (err) {}
   };
 
   useEffect(() => {
     fetchRequests();
   }, []);
 
-  if (!requests || requests.length === 0) {
-    return <div className="w-2/3 mx-auto mt-10">No requests found.</div>;
-  }
+  if (!requests) return;
+
+  if (requests.length === 0)
+    return <h1 className="flex justify-center my-10"> No Requests Found</h1>;
 
   return (
-    <div className="w-2/4 mx-auto mt-10">
+    <div className="text-center my-10">
+      <h1 className="text-bold text-white text-3xl">Connection Requests</h1>
+
       {requests.map((request) => {
-        const { firstName, lastName, photoUrl, gender, skills } =
+        const { _id, firstName, lastName, photoUrl, age, gender, about } =
           request.fromUserId;
+
         return (
-          <ul
-            key={request._id || request.id}
-            className="list bg-base-300 rounded-box shadow-md"
+          <div
+            key={_id}
+            className=" flex justify-between items-center m-4 p-4 rounded-lg bg-base-300  mx-auto"
           >
-            <li className="list-row">
-              <div>
-                <img
-                  className="size-10 rounded-box"
-                  src={photoUrl}
-                  alt={`${firstName} ${lastName}`}
-                />
-              </div>
-              <div>
-                <div>
-                  {firstName} {lastName}
-                </div>
-                <div className="text-xs uppercase font-semibold opacity-60">
-                  {gender && `${gender}  `}
-                  {skills?.join(", ")}
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <button
-                  className="btn btn-primary"
-                  onClick={() =>
-                    reviewRequest("accepted", request._id || request.id)
-                  }
-                >
-                  Accept
-                </button>
-                <button
-                  className="btn btn-secondary"
-                  onClick={() =>
-                    reviewRequest("rejected", request._id || request.id)
-                  }
-                >
-                  Decline
-                </button>
-              </div>
-            </li>
-          </ul>
+            <div>
+              <img
+                alt="photo"
+                className="w-20 h-20 rounded-full"
+                src={photoUrl}
+              />
+            </div>
+            <div className="text-left mx-4 ">
+              <h2 className="font-bold text-xl">
+                {firstName + " " + lastName}
+              </h2>
+              {age && gender && <p>{age + ", " + gender}</p>}
+              <p>{about}</p>
+            </div>
+            <div>
+              <button
+                className="btn btn-primary mx-2"
+                onClick={() => reviewRequest("rejected", request._id)}
+              >
+                Reject
+              </button>
+              <button
+                className="btn btn-secondary mx-2"
+                onClick={() => reviewRequest("accepted", request._id)}
+              >
+                Accept
+              </button>
+            </div>
+          </div>
         );
       })}
     </div>
   );
 };
-export default Request;
+export default Requests;

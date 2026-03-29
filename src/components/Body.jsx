@@ -1,43 +1,42 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
+import Footer from "./Footer";
 import axios from "axios";
-import { use, useEffect } from "react";
+import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { BASE_URL } from "../utils/constant";
+import { useEffect } from "react";
 
 const Body = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
-  const fetchUserProfile = async () => {
+  const userData = useSelector((store) => store.user);
+
+  const fetchUser = async () => {
+    if (userData) return;
     try {
-      if (user) return; // If user data is already in the store, skip fetching
-      const response = await axios.get(BASE_URL + "/profile/view", {
+      const res = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
       });
-      dispatch(addUser(response.data.data));
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        // Handle unauthorized access
-        console.error("Unauthorized access - please log in.");
+      dispatch(addUser(res.data));
+    } catch (err) {
+      if (err.status === 401) {
         navigate("/login");
-      } else {
-        console.error("Error fetching user data:", error);
       }
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    fetchUserProfile();
+    fetchUser();
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen pb-20">
       <NavBar />
       <Outlet />
-    </>
+      <Footer />
+    </div>
   );
 };
-
 export default Body;

@@ -1,16 +1,19 @@
 import { useState } from "react";
 import axios from "axios";
-import { BASE_URL } from "../utils/constant";
-import EditForm from "./EditForm";
+import { BASE_URL } from "../utils/constants";
+import EditForm from "./EditProfile";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const SingUp = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     emailId: "",
     password: "",
-    gender: "other",
-    photoUrl: "",
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -29,8 +32,6 @@ const SingUp = () => {
           lastName: formData.lastName,
           emailId: formData.emailId,
           password: formData.password,
-          gender: formData.gender,
-          photoUrl: formData.photoUrl,
         },
         {
           withCredentials: true,
@@ -39,14 +40,22 @@ const SingUp = () => {
 
       setError(null);
       setSuccess(response?.data?.message || "Sign up successful!");
+
+      const userState =
+        response?.data?.data && typeof response.data.data === "object"
+          ? { data: response.data.data }
+          : response.data;
+
+      dispatch(addUser(userState));
+
       setFormData({
         firstName: "",
         lastName: "",
         emailId: "",
         password: "",
-        gender: "other",
-        photoUrl: "",
       });
+
+      navigate("/profile");
     } catch (err) {
       setSuccess(null);
       setError(err?.response?.data?.error || "Unable to register user.");
@@ -58,17 +67,6 @@ const SingUp = () => {
     { name: "lastName", label: "Last Name", type: "text" },
     { name: "emailId", label: "Email", type: "email" },
     { name: "password", label: "Password", type: "password" },
-    {
-      name: "gender",
-      label: "Gender",
-      type: "select",
-      options: [
-        { value: "male", label: "Male" },
-        { value: "female", label: "Female" },
-        { value: "other", label: "Other" },
-      ],
-    },
-    { name: "photoUrl", label: "Photo URL", type: "text", fullWidth: true },
   ];
 
   return (
