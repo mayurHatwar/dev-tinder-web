@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="footer flex items-center p-8 justify-between bg-base-300 text-neutral-content max-h-10 fixed bottom-0">
+    <footer className="glass-footer footer flex items-center p-8 justify-between bg-base-300 text-neutral-content max-h-10 fixed bottom-0 w-full">
       <aside className="flex grid-flow-col items-center">
         <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
       </aside>

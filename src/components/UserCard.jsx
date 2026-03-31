@@ -33,7 +33,7 @@ const UserCard = ({ user, showSaveButton = true }) => {
 
   return (
     <div
-      className={`card bg-base-300 w-80 shadow-xl rounded-2xl overflow-hidden transition-all duration-300
+      className={`card bg-base-300 w-80 shadow-xl rounded-2xl overflow-hidden transition-all duration-300 pb-4
         ${isRemoving ? "opacity-0 scale-90" : "opacity-100 scale-100"}
         ${
           isRemoving && actionType === "interested"
@@ -47,8 +47,12 @@ const UserCard = ({ user, showSaveButton = true }) => {
         }
       `}
     >
-      <figure>
-        <img src={photoUrl} alt="photo" />
+      <figure className="h-80 w-full overflow-hidden">
+        <img
+          src={photoUrl}
+          alt="photo"
+          className="w-full h-full object-cover"
+        />
       </figure>
 
       <div className="card-body">

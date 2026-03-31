@@ -1,2 +1,96 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+:root {
+	--bg-start: #071024;
+	--bg-mid: #101a38;
+	--bg-end: #111c30;
+	--panel-border: rgba(255, 255, 255, 0.14);
+	--panel-bg: rgba(16, 24, 45, 0.74);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+	min-height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+	color: hsl(var(--bc));
+	background: linear-gradient(150deg, var(--bg-start) 0%, var(--bg-mid) 46%, var(--bg-end) 100%);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.app-shell {
+	position: relative;
+	isolation: isolate;
+}
+
+.app-content {
+	min-height: calc(100vh - 8rem);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1.5rem 1rem 6rem;
+}
+
+.app-content > * {
+	width: min(1120px, 100%);
+}
+
+@media (max-width: 768px) {
+	.app-content {
+		padding: 1rem 0.75rem 5.5rem;
+	}
+}
+
+.app-shell::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background:
+		linear-gradient(120deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.03) 75%, transparent 75%, transparent);
+	background-size: 34px 34px;
+	mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 85%);
+}
+
+.glass-nav,
+.glass-footer,
+.bg-base-300,
+.menu.dropdown-content {
+	border: 1px solid var(--panel-border);
+	background: var(--panel-bg) !important;
+	backdrop-filter: blur(14px);
+}
+
+.glass-nav,
+.glass-footer {
+	box-shadow: 0 16px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card,
+.alert,
+.toast > .alert,
+.chat-bubble {
+	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+}
+
+.btn {
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
