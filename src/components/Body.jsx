@@ -35,7 +35,7 @@ const Body = () => {
   return (
     <div
       data-theme="dim"
-      className="app-shell min-h-screen pb-20"
+      className="app-shell min-h-screen"
       style={{
         backgroundImage: `linear-gradient(155deg, rgba(4, 8, 18, 0.78), rgba(8, 16, 30, 0.84)), url(${vibeCodingBg})`,
         backgroundSize: "cover",
