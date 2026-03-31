@@ -5,6 +5,25 @@ import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
+const getErrorMessage = (err) => {
+  const responseData = err?.response?.data;
+
+  if (typeof responseData === "string") return responseData;
+  if (typeof responseData?.error === "string") return responseData.error;
+  if (typeof responseData?.message === "string") return responseData.message;
+  if (typeof err?.message === "string") return err.message;
+
+  return "Something went wrong";
+};
+
+const getUserPayload = (payload) => {
+  if (payload?.data && typeof payload.data === "object") {
+    return payload.data;
+  }
+
+  return payload;
+};
+
 const Login = () => {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
@@ -25,10 +44,10 @@ const Login = () => {
         },
         { withCredentials: true },
       );
-      dispatch(addUser(res.data));
+      dispatch(addUser(getUserPayload(res.data)));
       return navigate("/");
     } catch (err) {
-      setError(err?.response?.data || "Something went wrong");
+      setError(getErrorMessage(err));
     }
   };
 
@@ -39,10 +58,10 @@ const Login = () => {
         { firstName, lastName, emailId, password },
         { withCredentials: true },
       );
-      dispatch(addUser(res.data));
+      dispatch(addUser(getUserPayload(res.data)));
       return navigate("/profile");
     } catch (err) {
-      setError(err?.response?.data || "Something went wrong");
+      setError(getErrorMessage(err));
     }
   };
 

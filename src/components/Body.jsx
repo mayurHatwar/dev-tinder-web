@@ -8,6 +8,14 @@ import { addUser } from "../utils/userSlice";
 import { useEffect } from "react";
 import vibeCodingBg from "../assets/vibe-coding.png";
 
+const getUserPayload = (payload) => {
+  if (payload?.data && typeof payload.data === "object") {
+    return payload.data;
+  }
+
+  return payload;
+};
+
 const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,7 +27,7 @@ const Body = () => {
       const res = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
       });
-      dispatch(addUser(res.data));
+      dispatch(addUser(getUserPayload(res.data)));
     } catch (err) {
       if (err.status === 401) {
         navigate("/login");

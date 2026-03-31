@@ -9,6 +9,7 @@ import Chat from "daisyui/components/chat";
 import { Provider } from "react-redux";
 import appStore from "./utils/AppStore";
 import Premium from "./components/Premium";
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
               <Route path="/requests" element={<Requests />} />
               <Route path="/premium" element={<Premium />} />
               <Route path="/chat/:targetUserId" element={<Chat />} />
+              <Route path="/error" element={<ErrorPage />} />
+              <Route path="*" element={<ErrorPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

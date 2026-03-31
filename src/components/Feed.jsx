@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addFeed } from "../utils/feedSlice";
+import { addFeed, appendFeed } from "../utils/feedSlice";
 import { useEffect, useState } from "react";
 import UserCard from "./UserCard";
 
@@ -27,58 +27,105 @@ const MOTIVATION_MESSAGES = [
 const Feed = () => {
   const feeds = useSelector((store) => store.feed);
   const dispatch = useDispatch();
+
   const [messageIndex] = useState(() =>
     Math.floor(Math.random() * MOTIVATION_MESSAGES.length),
   );
+  const [isFetching, setIsFetching] = useState(false);
+  const [isFeedExhausted, setIsFeedExhausted] = useState(false);
 
-  const getFeed = async () => {
-    if (feeds) return;
+  const getFeed = async (append = false) => {
+    if (isFetching || isFeedExhausted) return;
+    setIsFetching(true);
+
     try {
       const res = await axios.get(BASE_URL + "/feed", {
         withCredentials: true,
       });
-      dispatch(addFeed(res?.data?.data));
+
+      const fetchedProfiles = res?.data?.data ?? [];
+
+      if (fetchedProfiles.length === 0) {
+        setIsFeedExhausted(true);
+
+        if (!append && feeds === null) {
+          dispatch(addFeed([]));
+        }
+
+        return;
+      }
+
+      if (append) {
+        dispatch(appendFeed(fetchedProfiles));
+      } else {
+        dispatch(addFeed(fetchedProfiles));
+      }
     } catch (err) {
-      //TODO: handle error
+      // TODO: handle error
+    } finally {
+      setIsFetching(false);
     }
   };
 
   useEffect(() => {
-    getFeed();
-  }, []);
+    if (feeds === null) {
+      getFeed(false);
+    }
+  }, [feeds]);
 
-  if (!feeds) return;
+  useEffect(() => {
+    if (Array.isArray(feeds) && feeds.length === 1) {
+      getFeed(true);
+    }
+  }, [feeds]);
 
-  if (feeds.length <= 0)
+  if (feeds === null) {
+    return (
+      <h1 className="flex justify-center my-10 text-base-content/80">
+        Loading profiles...
+      </h1>
+    );
+  }
+
+  if (feeds.length === 0 && isFeedExhausted) {
     return <h1 className="flex justify-center my-10">No new users founds!</h1>;
+  }
+
+  if (feeds.length === 0) {
+    return (
+      <h1 className="flex justify-center my-10 text-base-content/80">
+        Finding more profiles for you...
+      </h1>
+    );
+  }
 
   return (
-    feeds && (
-      <div className="flex flex-col justify-center items-center gap-7 w-full">
-        <div className="text-center mb-10 transition-all duration-300">
-          <p className="text-sm uppercase tracking-[0.2em] text-info/80">
-            {MOTIVATION_MESSAGES[messageIndex].tag}
-          </p>
-          <h1 className="text-2xl md:text-3xl font-extrabold">
-            {MOTIVATION_MESSAGES[messageIndex].title}
-          </h1>
-        </div>
-        <div className="relative w-[300px] h-[400px]">
-          {feeds.map((feed, index) => (
-            <div
-              key={feed._id}
-              className="absolute w-full h-full"
-              style={{
-                transform: `translateY(${index * 5}px)`,
-                zIndex: feeds.length - index,
-              }}
-            >
-              <UserCard user={feed} />
-            </div>
-          ))}
-        </div>
+    <div className="flex flex-col justify-center items-center gap-7 w-full">
+      <div className="text-center mb-10 transition-all duration-300">
+        <p className="text-sm uppercase tracking-[0.2em] text-info/80">
+          {MOTIVATION_MESSAGES[messageIndex].tag}
+        </p>
+        <h1 className="text-2xl md:text-3xl font-extrabold">
+          {MOTIVATION_MESSAGES[messageIndex].title}
+        </h1>
       </div>
-    )
+
+      <div className="relative w-[300px] h-[400px]">
+        {feeds.map((feed, index) => (
+          <div
+            key={feed._id}
+            className="absolute w-full h-full"
+            style={{
+              transform: `translateY(${index * 5}px)`,
+              zIndex: feeds.length - index,
+            }}
+          >
+            <UserCard user={feed} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
+
 export default Feed;

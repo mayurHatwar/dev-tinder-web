@@ -43,7 +43,7 @@ const SingUp = () => {
 
       const userState =
         response?.data?.data && typeof response.data.data === "object"
-          ? { data: response.data.data }
+          ? response.data.data
           : response.data;
 
       dispatch(addUser(userState));

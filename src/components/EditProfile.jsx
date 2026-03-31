@@ -42,7 +42,12 @@ const EditProfile = ({ user }) => {
       }, 3000);
       navigate("/");
     } catch (err) {
-      setError(err.response.data);
+      const responseData = err?.response?.data;
+      setError(
+        typeof responseData === "string"
+          ? responseData
+          : responseData?.error || responseData?.message || "Failed to save profile",
+      );
     }
   };
 
