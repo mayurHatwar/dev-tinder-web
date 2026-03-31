@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnections } from "../utils/conectionSlice";
 import { Link } from "react-router-dom";
+import DataNotFoundCard from "./DataNotFoundCard";
 
 const Connections = () => {
   const connections = useSelector((store) => store.connections);
@@ -26,7 +27,14 @@ const Connections = () => {
 
   if (!connections) return;
 
-  if (connections.length === 0) return <h1> No Connections Found</h1>;
+  if (connections.length === 0)
+    return (
+      <DataNotFoundCard
+        title="No Connections Found"
+        message="You currently have no connections."
+        buttonText="Explore Profiles"
+      />
+    );
 
   return (
     <div className="text-center my-10">

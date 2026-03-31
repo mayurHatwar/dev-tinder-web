@@ -3,10 +3,13 @@ import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../utils/requestSlice";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DataNotFoundCard from "./DataNotFoundCard";
 
 const Requests = () => {
   const requests = useSelector((store) => store.requests);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const reviewRequest = async (status, _id) => {
     try {
@@ -36,7 +39,13 @@ const Requests = () => {
   if (!requests) return;
 
   if (requests.length === 0)
-    return <h1 className="flex justify-center my-10"> No Requests Found</h1>;
+    return (
+      <DataNotFoundCard
+        title="No Requests Found"
+        message="You currently have no connection requests."
+        buttonText="Explore Profiles"
+      />
+    );
 
   return (
     <div className="text-center my-10">
