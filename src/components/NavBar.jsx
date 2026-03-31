@@ -24,7 +24,10 @@ const NavBar = () => {
   return (
     <div className="glass-nav bg-base-300 flex justify-between items-center px-4 py-2 shadow-md sticky top-0 z-30">
       {/* Left - Logo */}
-      <Link to="/" className="btn btn-ghost text-xl font-extrabold tracking-tight">
+      <Link
+        to="/"
+        className="btn btn-ghost text-xl font-extrabold tracking-tight"
+      >
         👩‍💻 DevTinder
       </Link>
 
