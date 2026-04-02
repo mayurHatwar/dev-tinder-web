@@ -99,30 +99,55 @@ const Feed = () => {
     );
   }
 
+  const message = MOTIVATION_MESSAGES[messageIndex];
+  const otherMessageIndex = (messageIndex + 1) % MOTIVATION_MESSAGES.length;
+  const otherMessage = MOTIVATION_MESSAGES[otherMessageIndex];
+
   return (
-    <div className="flex flex-col justify-center items-center gap-7 w-full">
-      <div className="text-center mb-10 transition-all duration-300">
-        <p className="text-sm uppercase tracking-[0.2em] text-info/80">
-          {MOTIVATION_MESSAGES[messageIndex].tag}
-        </p>
-        <h1 className="text-2xl md:text-3xl font-extrabold">
-          {MOTIVATION_MESSAGES[messageIndex].title}
-        </h1>
+    <div className="relative flex flex-col justify-center items-center gap-7 w-full pt-8 pb-24">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-80 h-80 rounded-full bg-gradient-to-br from-red-500/20 to-pink-500/20 blur-3xl"></div>
       </div>
 
-      <div className="relative w-[300px] h-[400px]">
-        {feeds.map((feed, index) => (
-          <div
-            key={feed._id}
-            className="absolute w-full h-full"
-            style={{
-              transform: `translateY(${index * 5}px)`,
-              zIndex: feeds.length - index,
-            }}
-          >
-            <UserCard user={feed} />
-          </div>
-        ))}
+      <div className="relative z-10 w-full max-w-5xl flex items-center justify-center">
+        <aside className="hidden md:flex flex-col items-end w-80 text-right text-white/80 uppercase tracking-wider">
+          <p className="text-xs mb-2">{message.tag}</p>
+          <h2 className="text-2xl lg:text-3xl font-black leading-tight">
+            {message.title}
+          </h2>
+          <p className="mt-2 text-sm italic">Swipe right, change your life.</p>
+        </aside>
+        <div className="relative mx-4 w-[320px] min-h-[420px] max-h-[calc(100vh-18rem)]">
+          {feeds.map((feed, index) => (
+            <div
+              key={feed._id}
+              className="absolute w-full h-full"
+              style={{
+                transform: `translateY(${index * 5}px)`,
+                zIndex: feeds.length - index,
+              }}
+            >
+              <UserCard user={feed} />
+            </div>
+          ))}
+        </div>
+
+        <aside className="hidden md:flex flex-col items-start w-80 text-left text-white/80 uppercase tracking-wider">
+          <p className="text-xs mb-2">{otherMessage.tag}</p>
+          <h2 className="text-2xl lg:text-3xl font-black leading-tight">
+            {otherMessage.title}
+          </h2>
+          <p className="mt-2 text-sm italic">
+            A connection away from your next role.
+          </p>
+        </aside>
+      </div>
+
+      <div className="md:hidden text-center px-4">
+        <p className="text-sm uppercase tracking-[0.2em] text-info/80">
+          {message.tag}
+        </p>
+        <h1 className="text-xl font-extrabold">{message.title}</h1>
       </div>
     </div>
   );
