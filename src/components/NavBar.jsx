@@ -67,6 +67,11 @@ const NavBar = () => {
             Connections
           </Link>
 
+          {/* Premium */}
+          <Link to="/premium" className="font-medium hover:underline">
+            Premium
+          </Link>
+
           {/* Welcome Text */}
           <span className="text-sm">
             Welcome, <span className="font-semibold">{user.firstName}</span>
